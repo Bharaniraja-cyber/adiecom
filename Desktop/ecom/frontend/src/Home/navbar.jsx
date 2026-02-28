@@ -18,7 +18,6 @@ function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (currUser) => {
@@ -26,7 +25,7 @@ function Navbar() {
             if (currUser) {
                 // Check if user is Admin from MongoDB
                 try {
-                    const res = await axios.get(`${API_URL}/api/users/${currUser.uid}`);
+                    const res = await axios.get(`https://adiecom.onrender.com/api/users/${currUser.uid}`);
                     setIsAdmin(res.data.role === 'admin');
                 } catch (err) {
                     setIsAdmin(false);
@@ -35,7 +34,7 @@ function Navbar() {
         });
 
         // Fetch products for Search suggestions
-        axios.get(`${API_URL}/api/products`)
+        axios.get(`https://adiecom.onrender.com/api/products`)
             .then(res => setAllProducts(res.data))
             .catch(err => console.log(err));
 
@@ -64,7 +63,7 @@ function Navbar() {
             window.removeEventListener("storage", syncCart);
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [API_URL]);
+    }, []);
 
     const handleSearch = (value) => {
         setSearchTerm(value);
