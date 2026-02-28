@@ -27,10 +27,12 @@ function Moreproduct() {
         });
     };
 
-    const filteredProducts = products.filter(p => 
+   const filteredProducts = Array.isArray(products) 
+    ? products.filter(p => 
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      )
+    : []; 
 
     return (
         <div className="bg-white min-h-screen">
