@@ -9,10 +9,10 @@ const port = process.env.PORT || 5002;
 
 // server.js
 app.use(cors({
-    origin: ["https://adiecom.vercel.app", "http://localhost:5173", "http://localhost:3000"],
+    origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
-}));app.use(express.json());
+}));
 
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI)
