@@ -16,7 +16,7 @@ function Shoes(){
         axios.get(`${API_URL}/api/products`)
             .then(res => setProducts(res.data))
             .catch(err => console.log("Error fetching products:", err));
-    }, []);
+    }, [API_URL]);
 
         const handleViewDetails = (product) => {
         navigate("/adizero", { 

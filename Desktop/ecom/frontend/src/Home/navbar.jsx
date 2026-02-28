@@ -64,7 +64,7 @@ function Navbar() {
             window.removeEventListener("storage", syncCart);
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [API_URL]);
 
     const handleSearch = (value) => {
         setSearchTerm(value);
