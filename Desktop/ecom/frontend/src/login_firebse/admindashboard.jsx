@@ -4,7 +4,6 @@ import Navbar from "../Home/navbar";
 import Footer from "../Home/footer";
 
 function AdminDashboard() {
-    const API_URL = import.meta.env.VITE_API_URL;
     const [product, setProduct] = useState({
         name: "",
         price: "",
