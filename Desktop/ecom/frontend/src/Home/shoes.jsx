@@ -29,7 +29,8 @@ function Shoes(){
         });
     };
 
-const filteredProducts = Array.isArray(products)    
+     const filteredProducts = products
+    
     return(
         <div>
             <Navbar/>

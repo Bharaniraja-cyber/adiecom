@@ -12,7 +12,7 @@ function Dash(){
         axios.get(`${API_URL}/api/products`)
             .then(res => setProducts(res.data))
             .catch(err => console.log("Error fetching products:", err));
-    }, [API_URL]);
+    },[API_URL]);
 
         const handleViewDetails = (product) => {
         navigate("/adizero", { 
@@ -25,9 +25,8 @@ function Dash(){
         });
     };
 
-    const filteredProducts = Array.isArray(products) 
-    
-        return(
+     const filteredProducts = products
+    return(
         <div className="bg-white">
     {/* Product Grid Section */}
     <div className="px-4 md:px-10 lg:px-12 py-10">
