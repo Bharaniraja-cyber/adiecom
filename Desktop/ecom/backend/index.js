@@ -8,15 +8,16 @@ const app = express();
 const port = process.env.PORT || 5002;
 
 // 1. IMPROVED CORS & SECURITY HEADERS
-app.use(cors({
-    origin: [
-        "https://adiecom.vercel.app", 
-        "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app",
-        "http://localhost:3000"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
+const corsOptions = {
+    origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Added OPTIONS
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Fixes the Cross-Origin Resource Policy error for images/resources
 app.use((req, res, next) => {
