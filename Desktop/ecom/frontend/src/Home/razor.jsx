@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const BuyNow = ({ amount, cartItems, address }) => {
     const navigate = useNavigate();
-    const API_URL = import.meta.env.VITE_API_URL;
     const handlePayment = async () => {
         try {
             // 1. Create the order on your Node.js backend (server.js)
