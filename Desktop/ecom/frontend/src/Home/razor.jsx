@@ -7,7 +7,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
         try {
             // 1. Create the order on your Node.js backend (server.js)
             // This hits your app.post('/create-order') route
-            const response = await axios.post(`${API_URL}/create-order`, {
+            const response = await axios.post(`https://adiecom.onrender.com/create-order`, {
                 amount: amount, // Total calculated from the Cart
             });
 
@@ -35,7 +35,6 @@ const BuyNow = ({ amount, cartItems, address }) => {
                     try {
                         // 3. Save the order details into your MongoDB (app.post('/api/orders'))
                         const res = await axios.post(`https://adiecom.onrender.com/api/orders`, paymentData);
-                        console.log("My Backend URL is:", API_URL);
 
                         if (res.status === 201) {
                             // 4. Clear the local storage bag
