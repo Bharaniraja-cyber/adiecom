@@ -36,7 +36,8 @@ const BuyNow = ({ amount, cartItems, address }) => {
                     try {
                         // 3. Save the order details into your MongoDB (app.post('/api/orders'))
                         const res = await axios.post(`${API_URL}/api/orders`, paymentData);
-                        
+                        console.log("My Backend URL is:", API_URL);
+
                         if (res.status === 201) {
                             // 4. Clear the local storage bag
                             localStorage.removeItem("cart"); 
@@ -72,7 +73,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
 
         } catch (error) {
             console.error("Backend Connection Error:", error);
-            alert("Payment failed to start. Please ensure your backend server is running on http://localhost:5002");
+            alert("Payment failed to start");
         }
     };
 
