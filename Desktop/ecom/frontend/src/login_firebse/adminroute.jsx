@@ -12,7 +12,7 @@ const AdminRoute = ({ children }) => {
             if (user) {
                 try {
                     // Fetch user role from your MongoDB
-                    const res = await axios.get(`http://localhost:5002/api/users/${user.uid}`);
+                    const res = await axios.get(`https://adiecom.onrender.com/api/users/${user.uid}`);
                     setIsAdmin(res.data.role === 'admin');
                 } catch (err) {
                     setIsAdmin(false);

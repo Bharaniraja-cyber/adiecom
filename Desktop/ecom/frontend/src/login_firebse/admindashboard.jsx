@@ -31,7 +31,7 @@ function AdminDashboard() {
                 sizes: sizeArray
             };
 
-            await axios.post(`${API_URL}/api/products`, payload)
+            await axios.post(`https://adiecom.onrender.com/api/products`, payload)
             alert("✅ Product added to database!");
             
             
