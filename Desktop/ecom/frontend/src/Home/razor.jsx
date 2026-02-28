@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const API_URL = import.meta.env.VITE_API_URL;
 
 const BuyNow = ({ amount, cartItems, address }) => {
     const navigate = useNavigate();
@@ -35,7 +34,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
 
                     try {
                         // 3. Save the order details into your MongoDB (app.post('/api/orders'))
-                        const res = await axios.post(`${API_URL}/api/orders`, paymentData);
+                        const res = await axios.post(`https://adiecom.onrender.com/api/orders`, paymentData);
                         console.log("My Backend URL is:", API_URL);
 
                         if (res.status === 201) {
