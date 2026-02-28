@@ -7,8 +7,12 @@ const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 5002;
 
-app.use(cors());
-app.use(express.json());
+// server.js
+app.use(cors({
+    origin: ["https://adiecom.vercel.app", "http://localhost:5173", "http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));app.use(express.json());
 
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI)
