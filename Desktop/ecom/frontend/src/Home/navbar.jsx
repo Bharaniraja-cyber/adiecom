@@ -23,7 +23,6 @@ function Navbar() {
         const unsubscribe = auth.onAuthStateChanged(async (currUser) => {
             setUser(currUser);
             if (currUser) {
-                // Check if user is Admin from MongoDB
                 try {
                     const res = await axios.get(`https://adiecom.onrender.com/api/users/${currUser.uid}`);
                     setIsAdmin(res.data.role === 'admin');
@@ -38,7 +37,7 @@ function Navbar() {
             .then(res => setAllProducts(res.data))
             .catch(err => console.log(err));
 
-        // Cart Sync Logic
+        // Cart Logic
         const syncCart = () => {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
             const total = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -49,7 +48,7 @@ function Navbar() {
         window.addEventListener("cartUpdate", syncCart);
         window.addEventListener("storage", syncCart);
 
-        // Close profile dropdown on outside click
+        // Close profile dropdown 
         const handleClickOutside = (e) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setIsProfileOpen(false);

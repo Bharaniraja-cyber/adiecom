@@ -7,19 +7,17 @@ const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 5002;
 
-// 1. IMPROVED CORS & SECURITY HEADERS
 const corsOptions = {
     origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Added OPTIONS
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+    optionsSuccessStatus: 200 
 };
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Fixes the Cross-Origin Resource Policy error for images/resources
 app.use((req, res, next) => {
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     next();
@@ -27,7 +25,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// 2. ROOT HEALTH CHECK (Prevents "Cannot GET /" error)
 app.get('/', (req, res) => {
     res.status(200).send("🚀 Adidas E-com API is live and running!");
 });
@@ -50,7 +47,7 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// --- AUTH ROUTES ---
+// AUTH ROUTES
 app.post('/api/users/register', async (req, res) => {
     try {
         const { uid, email } = req.body;

@@ -1,49 +1,69 @@
 import { useEffect, useState } from "react";
 import auth from "./firebase";
-import { GoogleAuthProvider, signInWithEmailAndPassword , signInWithPopup } from "firebase/auth";
-import {useNavigate} from "react-router-dom";
+import { 
+    GoogleAuthProvider, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    sendPasswordResetEmail 
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import adidas from "../assets/689347.jpg";
 
-function Login(){
+function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    function handleLogin(){
+    //  Add the Password Reset Logic
+    const handleForgotPassword = () => {
+        if (!email) {
+            alert("Please enter your email address first.");
+            return;
+        }
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert("Password reset link sent! Check your inbox.");
+            })
+            .catch((err) => {
+                alert(err.message);
+            });
+    };
+
+    function handleLogin() {
+        if (!email || !password) {
+            alert("Please fill in all fields.");
+            return;
+        }
         setLoading(true);
         signInWithEmailAndPassword(auth, email, password)
-        .then(()=> {
-            navigate("/dashboard");
-        })
-        .catch((err) => {
-            alert(err.message);
-            setLoading(false);
-        })
+            .then(() => {
+                navigate("/dashboard");
+            })
+            .catch((err) => {
+                alert(err.message);
+                setLoading(false);
+            });
     }
 
-    function handleGoogleLogin(){
+    function handleGoogleLogin() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
-        .then(() => navigate("/dashboard"))
-        .catch((err) => alert(err.message));
+            .then(() => navigate("/dashboard"))
+            .catch((err) => alert(err.message));
     }
 
     useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-        if (user) {
-            navigate("/dashboard", { replace: true });
-        }
-    });
-    return () => unsubscribe();
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                navigate("/dashboard", { replace: true });
+            }
+        });
+        return () => unsubscribe();
     }, [navigate]);
 
-    return(
+    return (
         <div className="p-10 flex bg-white flex-col items-center justify-center w-full min-h-screen font-sans px-4">
-            {/* Responsive Width: 
-                Mobile: w-full (maximized space)
-                Desktop: max-w-[450px]
-            */}
             <div className="flex border border-black flex-col w-full max-w-[450px] p-6 md:p-10 shadow-sm">
                 <img src={adidas} className="w-16 md:w-20 mb-6 md:mb-8 self-center" alt="logo" />
                 
@@ -67,6 +87,16 @@ function Login(){
                         onChange={(e) => setPassword(e.target.value)} 
                     />
 
+                    {/* 3. Add Forgot Password Link */}
+                    <div className="flex justify-end">
+                        <button 
+                            onClick={handleForgotPassword}
+                            className="text-[10px] font-black uppercase tracking-widest underline hover:text-gray-500 transition-colors"
+                        >
+                            Forgot Password?
+                        </button>
+                    </div>
+
                     <button 
                         className="py-4 bg-black text-white w-full font-black uppercase tracking-widest hover:bg-gray-800 transition-all flex justify-between px-6 items-center group active:scale-[0.98]" 
                         onClick={handleLogin}
@@ -89,7 +119,7 @@ function Login(){
                 </p>
             </div>
         </div>
-    )
+    );
 }
 
 export default Login;

@@ -10,7 +10,7 @@ function AdminDashboard() {
         description: "",
         category: "Sportswear",
         image: "",
-        sizes: "4, 5, 6, 7, 8, 9, 10, 11, 12", // Default sizes as string
+        sizes: "4, 5, 6, 7, 8, 9, 10, 11, 12", 
         isNewProduct: false
     });
 
@@ -21,7 +21,6 @@ function AdminDashboard() {
         setLoading(true);
 
         try {
-            // Transform sizes string into an array of numbers
             const sizeArray = product.sizes.split(",").map(s => Number(s.trim()));
 
             const payload = {
