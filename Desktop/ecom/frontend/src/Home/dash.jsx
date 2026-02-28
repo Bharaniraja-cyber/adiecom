@@ -25,7 +25,7 @@ function Dash(){
         });
     };
 
-const filteredProducts = Array.isArray(products) 
+    const filteredProducts = Array.isArray(products) 
     
         return(
         <div className="bg-white">

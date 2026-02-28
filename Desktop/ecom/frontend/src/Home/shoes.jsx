@@ -29,8 +29,7 @@ function Shoes(){
         });
     };
 
-     const filteredProducts = products
-    
+const filteredProducts = Array.isArray(products)    
     return(
         <div>
             <Navbar/>

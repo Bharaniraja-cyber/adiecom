@@ -7,13 +7,31 @@ const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 5002;
 
-// server.js
+// 1. IMPROVED CORS & SECURITY HEADERS
 app.use(cors({
-    origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app"],
+    origin: [
+        "https://adiecom.vercel.app", 
+        "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app",
+        "http://localhost:3000"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
 
+// Fixes the Cross-Origin Resource Policy error for images/resources
+app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+});
+
+app.use(express.json());
+
+// 2. ROOT HEALTH CHECK (Prevents "Cannot GET /" error)
+app.get('/', (req, res) => {
+    res.status(200).send("🚀 Adidas E-com API is live and running!");
+});
+
+// Connect to MongoDB Atlas
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI)
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
@@ -31,8 +49,7 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-
-// Auth: Register User
+// --- AUTH ROUTES ---
 app.post('/api/users/register', async (req, res) => {
     try {
         const { uid, email } = req.body;
@@ -47,7 +64,6 @@ app.post('/api/users/register', async (req, res) => {
     }
 });
 
-// Auth: Get User Role
 app.get('/api/users/:uid', async (req, res) => {
     try {
         const user = await User.findOne({ uid: req.params.uid });
@@ -58,7 +74,7 @@ app.get('/api/users/:uid', async (req, res) => {
     }
 });
 
-// Products: Get All
+// --- PRODUCT ROUTES ---
 app.get('/api/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -68,7 +84,6 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// Products: Add New (Admin)
 app.post('/api/products', async (req, res) => {
     try {
         const { name, price, description, category, image, sizes, isNewProduct } = req.body;
@@ -82,13 +97,12 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-// Razorpay: Initialize
+// --- RAZORPAY & ORDER ROUTES ---
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID, 
   key_secret: process.env.RAZORPAY_KEY_SECRET, 
 });
 
-// Payments: Create Razorpay Order
 app.post('/create-order', async (req, res) => {
     try {
         const { amount } = req.body;
@@ -104,7 +118,6 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
-// Orders: Save to DB
 app.post('/api/orders', async (req, res) => {
     try {
         const { cartItems, address, totalAmount, razorpay_payment_id, razorpay_order_id } = req.body;
@@ -120,5 +133,5 @@ app.post('/api/orders', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 });

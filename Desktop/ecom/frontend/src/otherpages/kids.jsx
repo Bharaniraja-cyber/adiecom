@@ -42,7 +42,7 @@ function Kids(){
                     <h1 className="text-xl font-bold tracking-wider">KIDS’ CLOTHING & SHOES</h1>
                     <p className="font-thin text-sm md:w-2/3 text-justify">As a creator, you look for ways to excel and express yourself when and where you can, from reaching for that last rep to evolving your streetwear style. Log miles or tear down the baseline in kids' shoes with responsive cushioning. Rep an athletic style off the field in lifestyle apparel born of sport heritage. From athletes to streetwear enthusiasts, adidas kids’ clothing and shoes exist to let you go harder, dig deeper, and get the most out of yourself, from the pitch to the street to the road less traveled.</p>
                 </div>
-                <Footer/>
+            <Footer/>
 
         </div>
     )
