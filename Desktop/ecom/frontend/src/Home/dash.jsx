@@ -25,8 +25,9 @@ function Dash(){
         });
     };
 
-     const filteredProducts = products
-    return(
+const filteredProducts = Array.isArray(products) 
+    
+        return(
         <div className="bg-white">
     {/* Product Grid Section */}
     <div className="px-4 md:px-10 lg:px-12 py-10">
