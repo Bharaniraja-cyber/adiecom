@@ -4,6 +4,7 @@ import Navbar from "../Home/navbar";
 import Footer from "../Home/footer";
 
 function AdminDashboard() {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [product, setProduct] = useState({
         name: "",
         price: "",
@@ -30,7 +31,7 @@ function AdminDashboard() {
                 sizes: sizeArray
             };
 
-            await axios.post("http://localhost:5002/api/products", payload)
+            await axios.post(`${API_URL}/api/products`, payload)
             alert("✅ Product added to database!");
             
             

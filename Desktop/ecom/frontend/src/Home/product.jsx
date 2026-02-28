@@ -8,9 +8,10 @@ function Moreproduct() {
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        axios.get("http://localhost:5002/api/products")
+        axios.get(`${API_URL}/api/products`)
             .then(res => setProducts(res.data))
             .catch(err => console.log("Error fetching products:", err));
     }, []);

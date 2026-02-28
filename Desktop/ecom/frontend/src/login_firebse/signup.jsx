@@ -15,11 +15,11 @@ function Signup() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const API_URL = import.meta.env.VITE_API_URL;
     // Logic to save user to MongoDB after Firebase auth success
     const syncUserToMongoDB = async (user) => {
         try {
-            await axios.post("http://localhost:5002/api/users/register", {
+            await axios.post(`${API_URL}/api/users/register`, {
                 uid: user.uid,
                 email: user.email
             });

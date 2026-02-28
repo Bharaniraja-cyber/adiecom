@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 const BuyNow = ({ amount, cartItems, address }) => {
     const navigate = useNavigate();
-    
+    const API_URL = import.meta.env.VITE_API_URL;
     const handlePayment = async () => {
         try {
             // 1. Create the order on your Node.js backend (server.js)
             // This hits your app.post('/create-order') route
-            const response = await axios.post("http://localhost:5002/create-order", {
+            const response = await axios.post(`${API_URL}/create-order`, {
                 amount: amount, // Total calculated from the Cart
             });
 
@@ -35,7 +35,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
 
                     try {
                         // 3. Save the order details into your MongoDB (app.post('/api/orders'))
-                        const res = await axios.post("http://localhost:5002/api/orders", paymentData);
+                        const res = await axios.post(`${API_URL}/api/orders`, paymentData);
                         
                         if (res.status === 201) {
                             // 4. Clear the local storage bag
