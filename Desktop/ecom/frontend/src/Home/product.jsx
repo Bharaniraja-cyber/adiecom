@@ -85,7 +85,7 @@ function Moreproduct() {
 
                 {filteredProducts.length === 0 && (
                     <div className="text-center py-20">
-                        <p className="text-gray-400 italic">No products found matching "{searchTerm}"</p>
+                        <p className="text-gray-400 italic">No products found "{searchTerm}"</p>
                     </div>
                 )}
             </div>
