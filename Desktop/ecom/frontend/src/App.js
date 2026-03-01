@@ -14,6 +14,7 @@ import Men from './otherpages/men';
 import Women from './otherpages/women';
 import Kids from './otherpages/kids';
 import Outlet from './otherpages/outlet';
+import Order from './Home/order';
 import ProtectedRoute from './login_firebse/protectroute'; // Import the guard
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
@@ -72,6 +73,9 @@ function App() {
             <ProtectedRoute><Outlet /></ProtectedRoute>
           } />
        
+        <Route path="/orders" element={
+          <ProtectedRoute><Order /></ProtectedRoute>
+        } />
 
         
         <Route path="/verify-purchase" element={

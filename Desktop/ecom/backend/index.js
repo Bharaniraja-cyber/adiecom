@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 5002;
 
 const corsOptions = {
-    origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app"],
+    origin: ["https://adiecom.vercel.app", "https://adiecom-rkx8ww4hl-bharanirajas-projects.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -16,7 +16,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
 
 app.use((req, res, next) => {
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
@@ -39,15 +38,23 @@ mongoose.connect(mongoURI)
 const Product = require('./models/product'); 
 const Order = require('./models/order');
 
-// User Schema
+// User Schema (UPDATED: Added savedAddress)
 const userSchema = new mongoose.Schema({
     uid: { type: String, required: true, unique: true },
     email: { type: String, required: true },
-    role: { type: String, default: 'customer' }
+    role: { type: String, default: 'customer' },
+    savedAddress: {
+        fullName: String,
+        phone: String,
+        pin: String,
+        street: String,
+        city: String,
+        stateName: String
+    }
 });
 const User = mongoose.model('User', userSchema);
 
-// AUTH ROUTES
+// --- AUTH & ADDRESS ROUTES ---
 app.post('/api/users/register', async (req, res) => {
     try {
         const { uid, email } = req.body;
@@ -69,6 +76,21 @@ app.get('/api/users/:uid', async (req, res) => {
         else res.status(404).json({ message: "User not found" });
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+});
+
+// NEW: Route to update saved address
+app.put('/api/users/address/:uid', async (req, res) => {
+    try {
+        const { address } = req.body;
+        const updatedUser = await User.findOneAndUpdate(
+            { uid: req.params.uid },
+            { $set: { savedAddress: address } },
+            { new: true }
+        );
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json({ message: "Error saving address", error: err });
     }
 });
 
@@ -116,10 +138,12 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
+// UPDATED: Order saving now expects a UID
 app.post('/api/orders', async (req, res) => {
     try {
-        const { cartItems, address, totalAmount, razorpay_payment_id, razorpay_order_id } = req.body;
+        const { uid, cartItems, address, totalAmount, razorpay_payment_id, razorpay_order_id } = req.body;
         const newOrder = new Order({
+            uid, // Now saving UID with the order
             items: cartItems, address, totalAmount,
             paymentId: razorpay_payment_id, orderId: razorpay_order_id
         });
@@ -127,6 +151,16 @@ app.post('/api/orders', async (req, res) => {
         res.status(201).json({ message: "Order saved" });
     } catch (error) {
         res.status(500).json({ message: "Error saving order", error });
+    }
+});
+
+// NEW: Get all orders for a specific user
+app.get('/api/orders/user/:uid', async (req, res) => {
+    try {
+        const orders = await Order.find({ uid: req.params.uid }).sort({ createdAt: -1 });
+        res.json(orders);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching orders", error: err });
     }
 });
 
