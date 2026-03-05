@@ -38,7 +38,7 @@ function Login() {
         setLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .then(() => {
-                navigate("/dashboard");
+                navigate("/");
             })
             .catch((err) => {
                 alert(err.message);
@@ -56,7 +56,7 @@ function Login() {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                navigate("/dashboard", { replace: true });
+                navigate("/", { replace: true });
             }
         });
         return () => unsubscribe();
