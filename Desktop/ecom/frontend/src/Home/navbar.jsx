@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import auth from "../login_firebse/firebase";
+import { Link } from "react-router-dom";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -32,7 +33,6 @@ function Navbar() {
             }
         });
 
-        // Fetch products for Search suggestions
         axios.get(`https://adiecom.onrender.com/api/products`)
             .then(res => setAllProducts(res.data))
             .catch(err => console.log(err));
@@ -94,7 +94,7 @@ function Navbar() {
                     </button>
                     <img 
                         className="w-16 md:w-20 cursor-pointer object-cover" 
-                        onClick={() => navigate("/dashboard")} 
+                        onClick={() => navigate("/")} 
                         src={adidas} 
                         alt="logo" 
                     />
@@ -122,7 +122,7 @@ function Navbar() {
                         <p className="hover:text-black cursor-pointer">help</p>
                         <p className="hover:text-black cursor-pointer">wishlist</p>
                         <p className="text-black tracking-wide">
-                            {user ? `Hi, ${user.displayName || user.email.split('@')[0]}` : "Welcome"}
+                            {user ? `Hi, ${user.displayName || user.email.split('@')[0]}` : <Link to="/login" className="font-black uppercase tracking-widest">Login</Link>}
                         </p>
                     </div>
 

@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 function Dashboard() {
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Ensure page starts at top when dashboard loads
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { HeartIcon } from "lucide-react";
@@ -26,49 +26,51 @@ function Adizero() {
         window.scrollTo(0, 0);
     }, [productData.name]);
 
-    function handleAddToCart() {
-        if (!selectedSize) {
-            alert("Please select a size first");
-            return;
-        }
+const [showSuccess, setShowSuccess] = useState(false);
 
-        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-        
-        const existingItemIndex = existingCart.findIndex(
-            (item) => item.name === productData.name && item.size === selectedSize
-        );
-
-        if (existingItemIndex !== -1) {
-            existingCart[existingItemIndex].quantity += 1;
-        } else {
-            existingCart.push({
-                id: productData._id || Date.now(),
-                name: productData.name,
-                price: productData.price,
-                size: selectedSize,
-                productImg: productData.productImg,
-                category: productData.category,
-                quantity: 1
-            });
-        }
-
-        localStorage.setItem("cart", JSON.stringify(existingCart));
-        
-        // Dispatch custom event to update Navbar counter instantly
-        window.dispatchEvent(new Event("cartUpdate"));
-        
-        navigate("/cart");
+function handleAddToCart() {
+    if (!selectedSize) {
+        alert("Please select a size first");
+        return;
     }
 
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    const existingItemIndex = existingCart.findIndex(
+        (item) => item.name === productData.name && item.size === selectedSize
+    );
+
+    if (existingItemIndex !== -1) {
+        existingCart[existingItemIndex].quantity += 1;
+    } else {
+        existingCart.push({
+            id: productData._id || Date.now(),
+            name: productData.name,
+            price: productData.price,
+            size: selectedSize,
+            productImg: productData.productImg,
+            category: productData.category,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+    
+    window.dispatchEvent(new Event("cartUpdate"));
+
+    setShowSuccess(true);
+    
+    setTimeout(() => {
+        setShowSuccess(false);
+    }, 3000);
+}
     return (
         <div className="bg-white min-h-screen">
             <Navbar />
             
-            {/* Main Container: Column on mobile, Row on Desktop */}
             <div className="flex flex-col lg:flex-row w-full">
                 
-                {/* Left Side: Visuals (Images/Video) */}
-                {/* Mobile: Stacked | Desktop: 2-column grid */}
+                
                 <div className="w-full lg:w-[65%] grid grid-cols-1 md:grid-cols-2 gap-0.5 bg-gray-100">
                     <div className="p-10 md:p-0 lg:p-0 overflow-hidden  aspect-square bg-white">
                         <img 
@@ -104,11 +106,9 @@ function Adizero() {
                             30 Days easy return policy
                         </p>
                     </div>
-                    {/* Extra placeholders for desktop grid symmetry if needed */}
                 </div>
 
-                {/* Right Side: Product Info */}
-                {/* Sticky on desktop, scrolls with page on mobile */}
+               
                 <div className="w-full lg:w-[35%] flex flex-col gap-3 p-5 md:p-8 lg:p-5 tracking-wider lg:sticky lg:top-20 h-fit bg-white">
                     <div>
                         <p className="text-[10px] md:text-xs font-bold uppercase text-gray-500 tracking-widest">
@@ -130,7 +130,6 @@ function Adizero() {
 
                     <div>
                         <h2 className="text-sm mb-1 font-black uppercase">Select Size (UK)</h2>
-                        {/* Responsive grid for sizes: 4 cols on mobile, 5 on larger */}
                         <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                             {sizes.map((s) => (
                                 <button
@@ -170,7 +169,6 @@ function Adizero() {
                         </button>
                     </div>
 
-                    {/* Trust Badges */}
                      <div className="md:hidden p-2 px-10 border-t border-gray-100 space-y-3">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> 
@@ -180,9 +178,32 @@ function Adizero() {
                             30 Days easy return policy
                         </p>
                     </div>
+
+                          {showSuccess && (
+                        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-5 duration-300">
+                            <div className="bg-black text-white px-6 py-2 flex items-center gap-4  border border-white/20">
+                                <div className="bg-green-500 rounded-full p-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div className="flex flex-col">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em]">Success</p>
+                                    <p className="text-[11px] font-bold uppercase text-gray-300">Article added to bag</p>
+                                </div>
+                                <button 
+                                    onClick={() => navigate("/cart")}
+                                    className="ml-4 border-l border-gray-700 pl-4 text-[10px] font-black uppercase tracking-widest hover:text-blue-400 transition-colors"
+                                >
+                                    View Bag →
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     
                 </div>
             </div>
+      
             
             <Footer />
         </div>

@@ -22,12 +22,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes - Anyone can see these */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
 
-          <Route 
+        <Route 
         path="/admin" 
         element={
           <AdminRoute>
@@ -36,24 +36,18 @@ function App() {
         } 
       />
       
-        {/* Protected Routes - Only logged-in users can see these */}
-        <Route path="/dashboard" element={
-          <ProtectedRoute><Dashboard /></ProtectedRoute>
-        } />
         
-        <Route path="/adizero" element={
-          <ProtectedRoute><Adizero /></ProtectedRoute>
-        } />
+        <Route path="/adizero" element={<Adizero />} />
         
         <Route path="/address" element={
-          <ProtectedRoute><AddressPage /></ProtectedRoute>
+          <AddressPage />
         } />
         <Route path="/shoes" element={
-          <ProtectedRoute><Shoes /></ProtectedRoute>
+          <Shoes />
         } />
         
         <Route path="/cart" element={
-          <ProtectedRoute><Cart /></ProtectedRoute>
+          <Cart />
         } />
         
         <Route path="/success" element={
@@ -61,16 +55,16 @@ function App() {
         } />
         
           <Route path="/men" element={
-            <ProtectedRoute><Men /></ProtectedRoute>
+            <Men />
           } />
           <Route path="/women" element={
-            <ProtectedRoute><Women /></ProtectedRoute>
+            <Women />
           } />
           <Route path="/kids" element={
-            <ProtectedRoute><Kids /></ProtectedRoute>
+            <Kids />
           } />
           <Route path="/outlet" element={
-            <ProtectedRoute><Outlet /></ProtectedRoute>
+            <Outlet />
           } />
        
         <Route path="/orders" element={

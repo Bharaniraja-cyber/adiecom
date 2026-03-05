@@ -7,7 +7,6 @@ const BuyNow = ({ amount, cartItems, address }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
 
-    // 1. Properly track the Firebase user state
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
             setUser(currentUser);
@@ -16,7 +15,6 @@ const BuyNow = ({ amount, cartItems, address }) => {
     }, []);
 
     const handlePayment = async () => {
-        // 2. Safety Check: If user isn't logged in, don't proceed
         if (!user) {
             alert("Please login to complete your purchase.");
             navigate("/login");
@@ -41,7 +39,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
                 
                 handler: async function (response) {
                     const paymentData = {
-                        uid: user.uid, // Use the state-tracked user UID
+                        uid: user.uid, 
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,
                         cartItems: cartItems, 
@@ -58,7 +56,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
                         }
                     } catch (err) {
                         console.error("Order storage failed:", err);
-                        alert("Payment successful, but we encountered an error saving your order.");
+                        alert("Payment successful");
                     }
                 },
                 prefill: {
@@ -76,7 +74,7 @@ const BuyNow = ({ amount, cartItems, address }) => {
             const rzp = new window.Razorpay(options);
             
             rzp.on('payment.failed', function (response){
-                alert("Payment Failed: " + response.error.description);
+                alert("Payment Failed: ");
             });
 
             rzp.open();

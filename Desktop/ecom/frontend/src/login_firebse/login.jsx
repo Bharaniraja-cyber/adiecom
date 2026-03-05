@@ -15,7 +15,6 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    //  Add the Password Reset Logic
     const handleForgotPassword = () => {
         if (!email) {
             alert("Please enter your email address first.");
@@ -49,7 +48,7 @@ function Login() {
     function handleGoogleLogin() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then(() => navigate("/dashboard"))
+            .then(() => navigate("/"))
             .catch((err) => alert(err.message));
     }
 
