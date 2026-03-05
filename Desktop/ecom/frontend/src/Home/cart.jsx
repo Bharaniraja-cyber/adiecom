@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { Trash2, Plus, Minus } from "lucide-react";
-
+import auth from "../login_firebse/firebase";
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
@@ -12,6 +12,17 @@ function Cart() {
         const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCartItems(savedCart);
     }, []);
+
+    const handleCheckout = () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+    navigate("/login", { state: { from: "/address", cartItems, total: subtotal } });
+    }else {
+        alert("Please login to make purchase.");
+        navigate("/login");
+    }
+};
 
     const updateQuantity = (index, delta) => {
         const updated = [...cartItems];
@@ -69,7 +80,7 @@ function Cart() {
                         </div>
                         <button 
                             disabled={cartItems.length === 0}
-                            onClick={() => navigate("/address", { state: { cartItems, total: subtotal } })}
+                            onClick={handleCheckout}
                             className="w-full bg-black text-white py-5 font-black uppercase tracking-widest hover:bg-gray-800 disabled:bg-gray-200"
                         >
                             Checkout

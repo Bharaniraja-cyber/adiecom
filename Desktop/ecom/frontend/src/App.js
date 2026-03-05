@@ -40,7 +40,7 @@ function App() {
         <Route path="/adizero" element={<Adizero />} />
         
         <Route path="/address" element={
-          <AddressPage />
+          <ProtectedRoute><AddressPage /></ProtectedRoute>
         } />
         <Route path="/shoes" element={
           <Shoes />
