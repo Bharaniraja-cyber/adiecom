@@ -11,8 +11,8 @@ function AddressPage() {
     const location = useLocation();
     const navigate = useNavigate();
     
-    // States
-    const [user, setUser] = useState(null); // Now used in the JSX below
+    
+    const [user, setUser] = useState(null); 
     const [savedProfileAddress, setSavedProfileAddress] = useState(null);
     const [isManualEntry, setIsManualEntry] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ function AddressPage() {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
             if (currentUser) {
-                setUser(currentUser); // Assigning user state
+                setUser(currentUser);
                 try {
                     const res = await axios.get(`https://adiecom.onrender.com/api/users/${currentUser.uid}`);
                     if (res.data.savedAddress) {

@@ -38,7 +38,7 @@ mongoose.connect(mongoURI)
 const Product = require('./models/product'); 
 const Order = require('./models/order');
 
-// User Schema (UPDATED: Added savedAddress)
+// User Schema
 const userSchema = new mongoose.Schema({
     uid: { type: String, required: true, unique: true },
     email: { type: String, required: true },
@@ -79,7 +79,6 @@ app.get('/api/users/:uid', async (req, res) => {
     }
 });
 
-// NEW: Route to update saved address
 app.put('/api/users/address/:uid', async (req, res) => {
     try {
         const { address } = req.body;
@@ -94,7 +93,7 @@ app.put('/api/users/address/:uid', async (req, res) => {
     }
 });
 
-// --- PRODUCT ROUTES ---
+// --- PRODUCT ROUTES (CRUD) ---
 app.get('/api/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -107,13 +106,31 @@ app.get('/api/products', async (req, res) => {
 app.post('/api/products', async (req, res) => {
     try {
         const { name, price, description, category, image, sizes, isNewProduct } = req.body;
-        if (!name || !price || !image) return res.status(400).json({ message: "Missing required fields" });
-
         const newProduct = new Product({ name, price, description, category, image, sizes, isNewProduct });
         await newProduct.save();
         res.status(201).json(newProduct);
     } catch (err) {
         res.status(500).json({ message: "Database Error", error: err.message });
+    }
+});
+
+// NEW: Update Product
+app.put('/api/products/:id', async (req, res) => {
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(updatedProduct);
+    } catch (err) {
+        res.status(500).json({ message: "Update Error", error: err.message });
+    }
+});
+
+// NEW: Delete Product
+app.delete('/api/products/:id', async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Product deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Delete Error", error: err.message });
     }
 });
 
@@ -138,13 +155,11 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
-// UPDATED: Order saving now expects a UID
 app.post('/api/orders', async (req, res) => {
     try {
         const { uid, cartItems, address, totalAmount, razorpay_payment_id, razorpay_order_id } = req.body;
         const newOrder = new Order({
-            uid, // Now saving UID with the order
-            items: cartItems, address, totalAmount,
+            uid, items: cartItems, address, totalAmount,
             paymentId: razorpay_payment_id, orderId: razorpay_order_id
         });
         await newOrder.save();
@@ -154,7 +169,16 @@ app.post('/api/orders', async (req, res) => {
     }
 });
 
-// NEW: Get all orders for a specific user
+// NEW: Get ALL orders (For Admin Sales Dashboard)
+app.get('/api/orders/all', async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ createdAt: -1 });
+        res.json(orders);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching all orders", error: err });
+    }
+});
+
 app.get('/api/orders/user/:uid', async (req, res) => {
     try {
         const orders = await Order.find({ uid: req.params.uid }).sort({ createdAt: -1 });

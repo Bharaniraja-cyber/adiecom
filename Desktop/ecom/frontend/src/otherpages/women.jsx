@@ -33,7 +33,7 @@ function Women(){
                                             <p className="text-center underline font-medium tracking-wider p-2 border">Othersports</p>
                                         </div>
                                         
-                
+
                                      </div>
                 <Dash />
                 <Footer/>

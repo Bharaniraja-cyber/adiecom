@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 function Dash(){
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
@@ -52,7 +51,7 @@ function Dash(){
                     
                     {/* Product Info */}
                     <div className="flex flex-col flex-grow px-1">
-                        <h3 className="uppercase text-[13px] font-bold tracking-tight leading-none group-hover:underline decoration-1 underline-offset-4">
+                        <h3 className="uppercase text-[13px] font-bold tracking-wide leading-none group-hover:underline decoration-1 underline-offset-4">
                             {product.name}
                         </h3>
                         <p className="text-gray-400 text-[11px] mt-1 font-medium uppercase tracking-widest">
