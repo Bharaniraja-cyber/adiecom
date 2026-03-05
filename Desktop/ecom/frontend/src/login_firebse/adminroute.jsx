@@ -3,34 +3,53 @@ import { useEffect, useState } from "react";
 import auth from "../login_firebse/firebase";
 import axios from "axios";
 
+const API_URL = "https://adiecom.onrender.com";
+
 const AdminRoute = ({ children }) => {
     const [isAdmin, setIsAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const checkAdmin = async (user) => {
-            if (user) {
-                try {
-                    const res = await axios.get(`https://adiecom.onrender.com/api/users/${user.uid}`);
-                    setIsAdmin(res.data.role === 'admin');
-                } catch (err) {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                // Not even logged in
+                setIsAdmin(false);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                // Check role from your MongoDB
+                const res = await axios.get(`${API_URL}/api/users/${user.uid}`);
+                
+                // Ensure we handle cases where res.data might be empty
+                if (res.data && res.data.role === 'admin') {
+                    setIsAdmin(true);
+                } else {
                     setIsAdmin(false);
                 }
-            } else {
+            } catch (err) {
+                console.error("Admin verification failed:", err);
                 setIsAdmin(false);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
-        };
+        });
 
-        const unsubscribe = auth.onAuthStateChanged(checkAdmin);
         return () => unsubscribe();
     }, []);
 
-    if (loading) return <div className="h-screen flex items-center justify-center font-black">VERIFYING ADMIN...</div>;
+    if (loading) {
+        return (
+            <div className="h-screen flex flex-col items-center justify-center font-black uppercase italic tracking-tighter bg-white">
+                <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin mb-4"></div>
+                Verifying Credentials...
+            </div>
+        );
+    }
 
     if (!isAdmin) {
-        alert("Access Denied: Admins Only");
-        return <Navigate to="/dashboard" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return children;
